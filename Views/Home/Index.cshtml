@@ -2,13 +2,13 @@
     ViewData["Title"] = "Ínicio";
 }
 
-<h1 class="topo">bitCoin Now</h1>
+<h1 class="topo">bitCusto</h1>
 
 <hr />
 
 <div id="info">
     <form id="formulario">
-        <input type="text" id="bitPreco" value="1" name="fname" pattern="\([0-9]{2}\)[\s][0-9]{4}-[0-9]{4,5}">
+        <input type="number" id="bitPreco" value="1" name="fname" pattern="\([0-9]{2}\)[\s][0-9]{4}-[0-9]{4,5}">
         <label for="fname">BTC</label>
         =
         <input type="text" id="valorDolar" name="lname" disabled="disabled">
@@ -23,22 +23,24 @@
 
         function getPrecoBit() {
             var value = $.ajax({   
-                  url: 'home/get', 
+                url: 'home/getbitvalor', 
                    async: false
             }).responseText;
             return JSON.parse(value);
         };
 
         function atualizarPreco() {
-            var bit = document.getElementById('bitPreco').value;
-            if (bit != 0) {
-                var titulo = document.getElementById('valorDolar').value = bit * getPrecoBit().data.amount;
+            debugger
+            var sastoshi = document.getElementById('bitPreco').value;
+            var bit = getPrecoBit().data.amount;
+            if (sastoshi != 0) {
+                var titulo = document.getElementById('valorDolar').value = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(sastoshi * bit);
             }
             else {
                 var titulo =  $("#valorDolar").val(getPrecoBit().data.amount);
-                document.getElementById('valorDolar').value = getPrecoBit().data.amount;
+                document.getElementById('valorDolar').value = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(bit);
             }
-            document.title = titulo + " USD - bitNow";
+            document.title = titulo + " - bitCusto";
         };
 
         setInterval(function() {
@@ -47,9 +49,18 @@
 
          window.onload = atualizarPreco;
 
-            $('#bitPreco').on('input',function(e){
+        $('#bitPreco').on('input',function(e){
             atualizarPreco()
-            });
+        });
+
+        function resizable (el, factor) {
+          var int = Number(factor) || 7.7;
+          function resize() {el.style.width = ((el.value.length+1) * int) + 'px'}
+          var e = 'keyup,keypress,focus,blur,change'.split(',');
+          for (var i in e) el.addEventListener(e[i],resize,false);
+          resize();
+        }
+        resizable(document.getElementById('bitPreco'), 50);
 
     </script>
 }

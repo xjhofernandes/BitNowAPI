@@ -17,7 +17,7 @@ namespace bitNow.Controllers
         }
 
         [HttpGet]
-        public string Get()
+        public string GetBitValor()
         {
             HttpClient http = new HttpClient();
             var data = http.GetAsync("https://api.coinbase.com/v2/prices/spot?currency=USD").Result.Content.ReadAsStringAsync().Result;
